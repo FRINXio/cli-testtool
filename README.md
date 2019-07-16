@@ -18,7 +18,7 @@ root            soft nofile 10000
 echo "LOGOUT and LOGIN again so that the limits apply"
 ```
 
-## Running the script to simulat a network device device:
+## Running the script to simulate a network device device:
 
 ```
 sudo pip install MockSSH==1.4.5
@@ -29,7 +29,7 @@ python mockdevice.py 127.0.0.1 9999 11000 ssh devices/cisco_IOS.json
 ## Running the script to mount devices in ODL:
 
 ```
-./generateMount.sh 127.0.0.1 10000 10100 ssh
+./generateMount.sh 127.0.0.1 10000 10100 ssh [odl_host]
 ```
 
 # .json files to represent a device :

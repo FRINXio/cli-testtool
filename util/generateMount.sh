@@ -1,8 +1,9 @@
 #!/bin/bash
 set -e
 
-# Usage ./generateMount.sh cli_testtool_host low_port high_port protocol odl_host
-# Example ./generatMount.sh 127.0.0.1 10000 50000 ssh 127.0.0.1
+# Usage ./generateMount.sh cli_testtool_host low_port high_port protocol [odl_host]
+# Example ./generateMount.sh 127.0.0.1 10000 50000 ssh
+# Example ./generateMount.sh 127.0.0.1 10000 50000 ssh 127.0.0.1
 
 CLI_TESTTOOL_HOST=$1
 LOW_PORT=$2
