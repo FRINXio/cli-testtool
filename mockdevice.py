@@ -65,27 +65,23 @@ def main(args):
 
     if process_pool_size == 1:
         print("Running in a single process")
-        spawn_server(port_low, port_high, interface, protocol_type, data)
+        spawn_server(port_low, port_high -1, interface, protocol_type, data)
     else:
         print("Spawning pool with %s processes" % process_pool_size)
         pool = multiprocessing.Pool(processes if last_batch <= 0 else (processes + 1))
 
         args = []
         for i in range(0, processes):
-
             starting_port = port_low + i*batch_size
-            ending_port = port_low + batch_size + i*batch_size
+            ending_port = port_low + batch_size + i*batch_size - 1
             print("Spawning process for ports: %s - %s" % (starting_port, ending_port))
-            if i == processes - 1:
-                ending_port = ending_port + 1
-
             args.append((i, starting_port, ending_port, interface, protocol_type, data))
 
         r = pool.map_async(spawn_server_wrapper, args)
 
         if last_batch > 0:
-            starting_port = port_low + processes*batch_size + 1
-            ending_port = port_high + 1
+            starting_port = port_low + processes*batch_size
+            ending_port = port_high - 1
             print("Spawning process for ports: %s - %s" % (starting_port, ending_port))
             r2 = pool.map_async(spawn_server_wrapper, [(processes, starting_port, ending_port, interface, protocol_type, data)])
             try:
@@ -104,13 +100,14 @@ def spawn_server_wrapper(args):
 
 
 def spawn_server(port_low, port_high, interface, protocol_type, data):
+
     # p = psutil.Process(os.getpid())
     try:
         os.nice(-1)
     except Exception as e:
         print("Unable to lower niceness(priority), RUN AS SUDO, running with normal priority")
 
-    for i in range(port_low, port_high):
+    for i in range(port_low, port_high + 1):
         try:
             print("Spawning")
             show_commands, prompt_change_commands, usr, passwd, cmd_delay, default_prompt = parse_commands(data)
