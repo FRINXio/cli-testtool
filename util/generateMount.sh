@@ -1,16 +1,16 @@
 #!/bin/bash
 set -e
 
-# Usage ./generateMount.sh cli_testtool_host low_port high_port protocol [odl_host]
-# Example ./generateMount.sh 127.0.0.1 10000 50000 ssh
-# Example ./generateMount.sh 127.0.0.1 10000 50000 ssh 127.0.0.1
+# Usage ./generateMount.sh cli_testtool_host low_port port_number protocol [odl_host]
+# Example ./generateMount.sh 127.0.0.1 10000 100 ssh
+# Example ./generateMount.sh 127.0.0.1 10000 100 ssh 127.0.0.1
 
 CLI_TESTTOOL_HOST=$1
-LOW_PORT=$2
-HIGH_PORT=$3
+FIRST_PORT=$2
+PORT_NUM=$3
 PROTOCOL=$4
 ODL_HOST="${5:-localhost}"
-PORT_NUM=`expr $HIGH_PORT - $LOW_PORT`
+HIGH_PORT=`expr $FIRST_PORT + $PORT_NUM`
 MOUNT_ID_PREFIX="cli-"
 
 ODL_PORT="8181"
@@ -39,7 +39,7 @@ body="{
 # \"cli-topology:keepalive-initial-delay\": 400,
 # \"cli-topology:keepalive-timeout\" : 200,
 
-for port in `seq $LOW_PORT $HIGH_PORT`;
+for port in `seq $FIRST_PORT $HIGH_PORT`;
 do
   body="$body
       {
@@ -106,4 +106,3 @@ DIFF=$(echo "$END - $START" | bc)
 echo "Time spent: $DIFF seconds"
 data_size=`curl -s -u "${USERNAME}:${PASSWORD}" -H "Content-Type: application/json" -X GET "${SCHEME}://${ODL_HOST}:${ODL_PORT}/restconf/operational/network-topology:network-topology/topology/uniconfig/" | wc -c`
 echo "Total data of json.bytes in uniconfig: $data_size bytes"
-
