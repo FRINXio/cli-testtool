@@ -1,8 +1,10 @@
 #!/usr/bin/python
-#
 
-import sys, time, os
-#import psutil
+import os
+import sys
+import time
+import argparse
+# import psutil
 import MockSSH
 import MockSSHExtensions
 import traceback
@@ -28,21 +30,30 @@ import multiprocessing
 import subprocess
 
 pool = None
-batch_size = 100 # ports to handle per process
+batch_size = 100  # ports to handle per process
 
-def main():
 
-    # FIXME Make proper arguments
-    port_low = int(sys.argv[2])
-    port_high = int(sys.argv[3])
+def get_args(argv=None):
+    parser = argparse.ArgumentParser()
+    parser.add_argument('interface')
+    parser.add_argument('first_port')
+    parser.add_argument('devices_number')
+    parser.add_argument('protocol_type')
+    parser.add_argument('device_file')
+    return parser.parse_args(argv)
+
+
+def main(args):
+
+    protocol_type = args.protocol_type
+    device_file = args.device_file
+    interface = args.interface
+
+    port_low = int(args.first_port)
+    port_high = port_low + int(args.devices_number)
     all_ports = port_high - port_low
-
     last_batch = all_ports % batch_size
     processes = all_ports / batch_size
-
-    protocol_type = sys.argv[4]
-    device_file = sys.argv[5]
-    interface = sys.argv[1]
 
     log.startLogging(sys.stdout)
 
@@ -50,21 +61,21 @@ def main():
         data = json.load(f)
 
     global pool
-    process_pool_size = processes if last_batch <=0 else (processes + 1)
+    process_pool_size = processes if last_batch <= 0 else (processes + 1)
 
     if process_pool_size == 1:
-        print "Running in a single process"
+        print("Running in a single process")
         spawn_server(port_low, port_high, interface, protocol_type, data)
     else:
-        print "Spawning pool with %s processes" % process_pool_size
-        pool = multiprocessing.Pool(processes if last_batch <=0 else (processes + 1))
+        print("Spawning pool with %s processes" % process_pool_size)
+        pool = multiprocessing.Pool(processes if last_batch <= 0 else (processes + 1))
 
         args = []
         for i in range(0, processes):
 
             starting_port = port_low + i*batch_size
             ending_port = port_low + batch_size + i*batch_size
-            print "Spawning process for ports: %s - %s" % (starting_port, ending_port)
+            print("Spawning process for ports: %s - %s" % (starting_port, ending_port))
             if i == processes - 1:
                 ending_port = ending_port + 1
 
@@ -75,7 +86,7 @@ def main():
         if last_batch > 0:
             starting_port = port_low + processes*batch_size + 1
             ending_port = port_high + 1
-            print "Spawning process for ports: %s - %s" % (starting_port, ending_port)
+            print("Spawning process for ports: %s - %s" % (starting_port, ending_port))
             r2 = pool.map_async(spawn_server_wrapper, [(processes, starting_port, ending_port, interface, protocol_type, data)])
             try:
                 r2.wait()
@@ -84,29 +95,31 @@ def main():
 
         r.wait()
 
+
 def spawn_server_wrapper(args):
     # Wait N * 500 milliseconds to prevent all sub processes to start at once (e.g. batch 7 would wait 3.5 seconds before starting)
     # If processes start at once, this error might occur: https://twistedmatrix.com/trac/ticket/4759
     sleep((500.0 * args[0]) / 1000)
     spawn_server(*args[1:])
 
+
 def spawn_server(port_low, port_high, interface, protocol_type, data):
-    #p = psutil.Process(os.getpid())
+    # p = psutil.Process(os.getpid())
     try:
         os.nice(-1)
     except Exception as e:
-        print "Unable to lower niceness(priority), RUN AS SUDO, running with normal priority"
+        print("Unable to lower niceness(priority), RUN AS SUDO, running with normal priority")
 
     for i in range(port_low, port_high):
         try:
-            print "Spawning "
+            print("Spawning")
             show_commands, prompt_change_commands, usr, passwd, cmd_delay, default_prompt = parse_commands(data)
 
-            users = {usr : passwd}
+            users = {usr: passwd}
 
             local_commands = []
 
-            for cmd in show_commands:    
+            for cmd in show_commands:
                 command = getShowCommand(cmd, data, show_commands[cmd], cmd_delay)
                 local_commands.append(command)
 
@@ -116,7 +129,6 @@ def spawn_server(port_low, port_high, interface, protocol_type, data):
                 else:
                     command = getPromptChangingCommand(cmd, prompt_change_commands[cmd], cmd_delay)
                 local_commands.append(command)
-
 
             factory = None
             if (protocol_type == "ssh"):
@@ -128,7 +140,7 @@ def spawn_server(port_low, port_high, interface, protocol_type, data):
 
         except Exception as e:
             print >> sys.stderr, traceback.format_exc()
-            print "Unable to open port at %s, due to: %s" % (i, e)
+            print("Unable to open port at %s, due to: %s" % (i, e))
 
     reactor.run()
 
@@ -143,37 +155,41 @@ def parse_commands(data):
     usr = data["setting_default_user"]
     passwd = data["setting_default_passwd"]
 
-    print "Using username: %s and password: %s" % (usr, passwd)
+    print("Using username: %s and password: %s" % (usr, passwd))
 
     for cmd in data:
         if isinstance(data[cmd], dict):
             prompt_change_commands[cmd] = data[cmd]
-            #print "Adding prompt changing command: %s" % cmd
+            # print "Adding prompt changing command: %s" % cmd
         else:
             cmd_split = cmd.split(" ", 1)
             if (len(cmd_split) == 1):
                 show_commands[cmd_split[0]]
             else:
                 show_commands[cmd_split[0]].append(cmd_split[1])
-            #print "Adding show command: %s, with arguments: %s" % (cmd, show_commands[cmd])
+            # print("Adding show command: %s, with arguments: %s" % (cmd, show_commands[cmd]))
 
     return (show_commands, prompt_change_commands, usr, passwd, cmd_delay, default_prompt)
 
 
 def getPasswordPromptCommand(cmd, values, cmd_delay):
-    return MockSSHExtensions.SimplePromptingCommand(values["name"],values["password"],values["prompt"],values["newprompt"],values["error_message"], cmd_delay)
+    return MockSSHExtensions.SimplePromptingCommand(values["name"], values["password"], values["prompt"], values["newprompt"], values["error_message"], cmd_delay)
+
 
 def getPromptChangingCommand(cmd, values, cmd_delay):
     return MockSSHExtensions.PromptChangingCommand(cmd, values["newprompt"], cmd_delay)
 
+
 def getShowCommand(cmd, data, arguments, cmd_delay):
     return MockSSHExtensions.ShowCommand(cmd, data, cmd_delay, *arguments)
 
+
 if __name__ == "__main__":
+    args = get_args()
     try:
-        main()
+        main(args)
     except KeyboardInterrupt:
-        print "User interrupted"
+        print("User interrupted")
         global pool
         pool.close()
         pool.terminate()
