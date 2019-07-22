@@ -10,7 +10,7 @@ echo "
 *               hard nofile 10000
 *               soft nofile 10000
 root            hard nofile 10000
-root            soft nofile 10000 
+root            soft nofile 10000
 `whoami`        hard nofile 10000
 `whoami`        soft nofile 10000
 " | sudo tee --append /etc/security/limits.conf
@@ -23,13 +23,13 @@ echo "LOGOUT and LOGIN again so that the limits apply"
 ```
 sudo pip install MockSSH==1.4.5
 
-python mockdevice.py 127.0.0.1 9999 11000 ssh devices/cisco_IOS.json
+python mockdevice.py 127.0.0.1 10000 100 ssh devices/cisco_IOS.json
 ```
 
 ## Running the script to mount devices in ODL:
 
 ```
-./generateMount.sh 127.0.0.1 10000 10100 ssh [odl_host]
+./generateMount.sh 127.0.0.1 10000 100 ssh [odl_host]
 ```
 
 # .json files to represent a device :
