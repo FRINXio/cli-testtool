@@ -37,9 +37,20 @@ class ShowCommand(MockSSH.SSHCommand):
 
     def start(self):
         reqArgsEscaped = map(lambda x: x.replace('"', ''), self.required_arguments[1:])
+        print "Req args escaped:"
+        print reqArgsEscaped
+        print "Self args:"
+        print self.args
+        print "Joined:"
+        print " ".join(self.args[1:]) 
+        print "Joined all:"
+        print " ".join(self.args) 
         noArgs = (len(self.args[1:]) == 0) and (len(reqArgsEscaped) == 0)
         if (noArgs or " ".join(self.args[1:]) in set(reqArgsEscaped)):
-            self.writeln(self.data[" ".join(self.args)])
+            for k in self.data.keys():
+                if (k == " ".join(self.args) or k.replace('"', '') == " ".join(self.args)):
+                    self.writeln(self.data[k])
+                    break
         else:
             self.writeln("% Invalid input")
 
