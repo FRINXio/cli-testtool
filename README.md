@@ -18,7 +18,7 @@ root            soft nofile 10000
 echo "LOGOUT and LOGIN again so that the limits apply"
 ```
 
-## Running the script to simulate a network device device:
+## Running the script to simulate a network device:
 
 ```
 sudo pip install MockSSH==1.4.5
