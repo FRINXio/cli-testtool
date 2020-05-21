@@ -23,7 +23,7 @@ PASSWORD="admin"
 
 # Remove all cli nodes
 echo "Removing all cli nodes"
-curl -u "${USERNAME}:${PASSWORD}" -H "Content-Type: application/json" -X DELETE "${SCHEME}://${ODL_HOST}:${ODL_PORT}/restconf/config/network-topology:network-topology/topology/cli/"
+curl -u "${USERNAME}:${PASSWORD}" -H "Content-Type: application/json" -X DELETE "${SCHEME}://${ODL_HOST}:${ODL_PORT}/rests/data/network-topology:network-topology/topology=cli/"
 echo "
 
 Waiting a bit ...
@@ -74,7 +74,7 @@ body="$body
 echo "Sending mount requests"
 #echo $body
 
-curl -s -u "${USERNAME}:${PASSWORD}" -d @- -H "Content-Type: application/json" -X POST "${SCHEME}://${ODL_HOST}:${ODL_PORT}/restconf/config/network-topology:network-topology/topology/cli/" <<CURL_DATA
+curl -s -u "${USERNAME}:${PASSWORD}" -d @- -H "Content-Type: application/json" -X POST "${SCHEME}://${ODL_HOST}:${ODL_PORT}/rests/data/network-topology:network-topology/topology=cli/" <<CURL_DATA
 $body
 CURL_DATA
 
@@ -82,9 +82,9 @@ START=$(date +%s.%N)
 
 while (true);
 do
-	connected=`curl -s -u "${USERNAME}:${PASSWORD}" -H "Content-Type: application/json" -X GET "${SCHEME}://${ODL_HOST}:${ODL_PORT}/restconf/operational/network-topology:network-topology/topology/cli/" | grep -o 'connection-status":"connected"' | wc -l`
+	connected=`curl -s -u "${USERNAME}:${PASSWORD}" -H "Content-Type: application/json" -X GET "${SCHEME}://${ODL_HOST}:${ODL_PORT}/rests/data/network-topology:network-topology/topology=cli/" | grep -o 'connection-status":"connected"' | wc -l`
 
-	reconciled=`curl -s -u "${USERNAME}:${PASSWORD}" -H "Content-Type: application/json" -X GET "${SCHEME}://${ODL_HOST}:${ODL_PORT}/restconf/operational/network-topology:network-topology/topology/uniconfig/?depth=3" | grep -o "$MOUNT_ID_PREFIX" | wc -l`
+	reconciled=`curl -s -u "${USERNAME}:${PASSWORD}" -H "Content-Type: application/json" -X GET "${SCHEME}://${ODL_HOST}:${ODL_PORT}/rests/data/network-topology:network-topology/topology=uniconfig/?depth=3" | grep -o "$MOUNT_ID_PREFIX" | wc -l`
 	END=$(date +%s.%N)
 	DIFF=$(echo "$END - $START" | bc)
 	echo "Currently connected: $connected, took: $DIFF seconds"
@@ -104,5 +104,5 @@ done
 END=$(date +%s.%N)
 DIFF=$(echo "$END - $START" | bc)
 echo "Time spent: $DIFF seconds"
-data_size=`curl -s -u "${USERNAME}:${PASSWORD}" -H "Content-Type: application/json" -X GET "${SCHEME}://${ODL_HOST}:${ODL_PORT}/restconf/operational/network-topology:network-topology/topology/uniconfig/" | wc -c`
+data_size=`curl -s -u "${USERNAME}:${PASSWORD}" -H "Content-Type: application/json" -X GET "${SCHEME}://${ODL_HOST}:${ODL_PORT}/rests/data/network-topology:network-topology/topology=uniconfig/" | wc -c`
 echo "Total data of json.bytes in uniconfig: $data_size bytes"
