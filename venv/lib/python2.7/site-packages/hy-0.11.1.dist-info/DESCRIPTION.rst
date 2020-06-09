@@ -1,0 +1,4 @@
+Hy is a Python <--> Lisp layer. It helps
+make things work nicer, and lets Python and the Hy lisp variant play
+nice together. 
+
