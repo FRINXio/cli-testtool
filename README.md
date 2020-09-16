@@ -22,6 +22,7 @@ echo "LOGOUT and LOGIN again so that the limits apply"
 
 ```
 sudo pip install MockSSH==1.4.5
+sudo pip install cryptography==2.1.4
 
 python mockdevice.py 127.0.0.1 10000 100 ssh devices/cisco_IOS.json
 ```
