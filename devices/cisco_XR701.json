@@ -1,0 +1,38 @@
+{
+    "show running-config": "Wed Mar 17 17:01:13.138 UTC\nBuilding configuration...\n!! IOS XR Configuration version = 7.0.1.25I\n!! Last configuration change at Mon Mar 15 16:34:16 2021 by cisco\n!\nusername cisco\n group root-lr\n group cisco-support\n secret 5 $1$F20J$R5SNItly5TB3/BltxJ/YP.\n!\ncall-home\n service active\n contact smart-licensing\n profile CiscoTAC-1\n  active\n  destination transport-method http\n !\n!\ninterface MgmtEth0/RP0/CPU0/0\n ipv4 address 192.168.1.217 255.255.255.0\n!\ninterface GigabitEthernet0/0/0/0\n shutdown\n!\ninterface GigabitEthernet0/0/0/1\n shutdown\n!\ninterface GigabitEthernet0/0/0/2\n shutdown\n!\ninterface GigabitEthernet0/0/0/3\n shutdown\n!\ninterface GigabitEthernet0/0/0/4\n shutdown\n!\nnetconf agent tty\n!\nssh server v2\nssh server netconf vrf def\nssh server netconf vrf default\nend\n\n",
+    "show configuration commit list | utility egrep ^1 ": "",
+    
+    "setting_default_prompt": "RP/0/RP0/CPU0:ios#",
+    "setting_default_user": "cisco",
+    "setting_default_passwd": "cisco",
+    "setting_cmd_delay": 0,
+
+    "show inventory all": "Wed Mar 17 17:02:25.015 UTC\nNAME: \"0/0\", DESCR: \"Cisco IOS-XRv 9000 Centralized Line Card\"\nPID: R-IOSXRV9000-LC-C , VID: V01, SN: 36437DBDFDD\n\nNAME: \"0/0/0\", DESCR: \"N/A\"\nPID: NODE-1G-NIC-X     , VID: N/A, SN: N/A\n\nNAME: \"0/0/1\", DESCR: \"N/A\"\nPID: NODE-1G-NIC-X     , VID: N/A, SN: N/A\n\nNAME: \"0/0/2\", DESCR: \"N/A\"\nPID: NODE-1G-NIC-X     , VID: N/A, SN: N/A\n\nNAME: \"0/0/3\", DESCR: \"N/A\"\nPID: NODE-1G-NIC-X     , VID: N/A, SN: N/A\n\nNAME: \"0/0/4\", DESCR: \"N/A\"\nPID: NODE-1G-NIC-X     , VID: N/A, SN: N/A\n\nNAME: \"0/RP0\", DESCR: \"Cisco IOS-XRv 9000 Centralized Route Processor\"\nPID: R-IOSXRV9000-RP-C , VID: V01, SN: 5D6E81AB51D\n\nNAME: \"Rack 0\", DESCR: \"Cisco IOS-XRv 9000 Centralized Virtual Router\"\nPID: R-IOSXRV9000-CC   , VID: V01, SN: C9ABFE98673\n",
+    "show version": "Wed Mar 17 17:02:57.827 UTC\nCisco IOS XR Software, Version 7.0.1.25I\nCopyright (c) 2013-2018 by Cisco Systems, Inc.\n\nBuild Information:\n Built By     : nkhai\n Built On     : Thu Oct  4 19:28:07 PDT 2018\n Built Host   : iox-lnx-087\n Workspace    : /auto/iox-lnx-087-san1/prod/7.0.1.25I.SIT_IMAGE/xrv9k/ws\n Version      : 7.0.1.25I\n Location     : /opt/cisco/XR/packages/\n\ncisco IOS-XRv 9000 () processor\nSystem uptime is 14 minutes\n",
+
+    "terminal length 0": "OK",
+    "terminal width 0": "OK",
+
+    "configure": {
+    	"name": "configure",
+    	"newprompt": "RP/0/RP0/CPU0:ios(config)#"
+    },
+
+    "root": {
+        "name": "root",
+        "newprompt": "RP/0/RP0/CPU0:ios(config)#"
+    },
+
+    "commit": {
+        "name": "commit",
+        "newprompt": "RP/0/RP0/CPU0:ios(config)#"
+    },
+
+    "end": {
+    	"name": "end",
+    	"newprompt": "RP/0/RP0/CPU0:ios#"
+    },
+
+	"exit": ""
+
+}

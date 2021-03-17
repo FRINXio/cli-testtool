@@ -1,0 +1,38 @@
+{
+    "show running-config": "Wed Mar 17 16:42:52.309 UTC\nBuilding configuration...\n!! IOS XR Configuration 6.6.1\n!! Last configuration change at Wed Mar 17 09:20:41 2021 by cisco\n!\nhostname xr6\nusername cisco\n group root-lr\n group cisco-support\n secret 5 $1$JxGF$413LMHHFCKHVZi2HyUS8b/\n!\ncall-home\n service active\n contact smart-licensing\n profile CiscoTAC-1\n  active\n  destination transport-method http\n !\n!\ninterface MgmtEth0/RP0/CPU0/0\n ipv4 address 192.168.1.218 255.255.255.0\n!\ninterface GigabitEthernet0/0/0/0\n shutdown\n!\ninterface GigabitEthernet0/0/0/1\n shutdown\n!\ninterface GigabitEthernet0/0/0/2\n shutdown\n!\ninterface GigabitEthernet0/0/0/3\n shutdown\n!\ninterface GigabitEthernet0/0/0/4\n shutdown\n!\nnetconf agent tty\n!\nnetconf-yang agent\n ssh\n!\nssh timeout 120\nssh server v2\nssh server netconf vrf default\nend\n\n",
+    "show configuration commit list | utility egrep ^1 ": "",
+    
+    "setting_default_prompt": "RP/0/RP0/CPU0:xr6#",
+    "setting_default_user": "cisco",
+    "setting_default_passwd": "ciscocisco",
+    "setting_cmd_delay": 0,
+
+    "show inventory all": "Wed Mar 17 16:45:05.098 UTC\nNAME: \"0/0\", DESCR: \"Cisco IOS-XRv 9000 Centralized Line Card\"\nPID: R-IOSXRV9000-LC-C , VID: V01, SN: E457148CD03\n\nNAME: \"0/0/0\", DESCR: \"N/A\"\nPID: PORT-1G-NIC       , VID: N/A, SN: N/A\n\nNAME: \"0/0/1\", DESCR: \"N/A\"\nPID: PORT-1G-NIC       , VID: N/A, SN: N/A\n\nNAME: \"0/0/2\", DESCR: \"N/A\"\nPID: PORT-1G-NIC       , VID: N/A, SN: N/A\n\nNAME: \"0/0/3\", DESCR: \"N/A\"\nPID: PORT-1G-NIC       , VID: N/A, SN: N/A\n\nNAME: \"0/0/4\", DESCR: \"N/A\"\nPID: PORT-1G-NIC       , VID: N/A, SN: N/A\n\nNAME: \"0/RP0\", DESCR: \"Cisco IOS-XRv 9000 Centralized Route Processor\"\nPID: R-IOSXRV9000-RP-C , VID: V01, SN: 50E78AF6DE9\n\nNAME: \"Rack 0\", DESCR: \"Cisco IOS-XRv 9000 Centralized Virtual Router\"\nPID: R-IOSXRV9000-CC   , VID: V01, SN: BAB625F9CC2\n",
+    "show version": "Wed Mar 17 16:45:43.750 UTC\nCisco IOS XR Software, Version 6.6.1\nCopyright (c) 2013-2018 by Cisco Systems, Inc.\n\nBuild Information:\n Built By     : hlo\n Built On     : Thu Dec 20 18:27:48 PST 2018\n Built Host   : iox-ucs-033\n Workspace    : /auto/srcarchive16/prod/6.6.1/xrv9k/ws\n Version      : 6.6.1\n Location     : /opt/cisco/XR/packages/\n\ncisco IOS-XRv 9000 () processor\nSystem uptime is 20 hours 22 minutes\n",
+
+    "terminal length 0": "OK",
+    "terminal width 0": "OK",
+
+    "configure": {
+    	"name": "configure",
+    	"newprompt": "RP/0/RP0/CPU0:xr6(config)#"
+    },
+
+    "root": {
+        "name": "root",
+        "newprompt": "RP/0/RP0/CPU0:xr6(config)#"
+    },
+
+    "commit": {
+        "name": "commit",
+        "newprompt": "RP/0/RP0/CPU0:xr6(config)#"
+    },
+
+    "end": {
+    	"name": "end",
+    	"newprompt": "RP/0/RP0/CPU0:xr6#"
+    },
+
+	"exit": ""
+
+}

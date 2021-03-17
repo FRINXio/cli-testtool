@@ -1,0 +1,38 @@
+{
+    "show running-config": "Wed Mar 17 16:23:33.703 UTC\nBuilding configuration...\n!! IOS XR Configuration 5.3.4\n!! Last configuration change at Wed Mar 17 16:07:14 2021 by cisco\n!\ninterface MgmtEth0/0/CPU0/0\n ipv4 address 192.168.1.214 255.255.255.0\n!\ninterface GigabitEthernet0/0/0/0\n shutdown\n!\ninterface GigabitEthernet0/0/0/1\n shutdown\n!\ninterface GigabitEthernet0/0/0/2\n shutdown\n!\ninterface GigabitEthernet0/0/0/3\n shutdown\n!\ninterface GigabitEthernet0/0/0/4\n shutdown\n!\nssh server v2\nssh server netconf port 830\nnetconf-yang agent\n ssh\n!\nend\n\n",
+    "show configuration commit list | utility egrep ^1 ": "",
+    
+    "setting_default_prompt": "RP/0/0/CPU0:XR5#",
+    "setting_default_user": "cisco",
+    "setting_default_passwd": "cisco",
+    "setting_cmd_delay": 0,
+
+    "show inventory all": "Wed Mar 17 16:28:46.611 UTC\n",
+    "show version": "Wed Mar 17 16:26:40.160 UTC\n\nCisco IOS XR Software, Version 5.3.4[Default]\nCopyright (c) 2016 by Cisco Systems, Inc.\n\nROM: GRUB, Version 1.99(0), DEV RELEASE\n\nios uptime is 20 hours, 14 minutes\nSystem image file is \"bootflash:disk0/xrvr-os-mbi-5.3.4/mbixrvr-rp.vm\"\n\ncisco IOS XRv Series (Intel 686 F6M12S2) processor with 5242359K bytes of memory.\nIntel 686 F6M12S2 processor at 2405MHz, Revision 2.174\nIOS XRv Chassis\n\n5 GigabitEthernet\n1 Management Ethernet\n97070k bytes of non-volatile configuration memory.\n866M bytes of hard disk.\n2321392k bytes of disk0: (Sector size 512 bytes).\n\nConfiguration register on node 0/0/CPU0 is 0x2102\nBoot device on node 0/0/CPU0 is disk0:\nPackage active on node 0/0/CPU0:\niosxr-infra, V 5.3.4[Default], Cisco Systems, at disk0:iosxr-infra-5.3.4\n    Built on Tue Oct  4 04:22:33 UTC 2016\n    By iox-lnx-003 in /auto/srcarchive15/production/5.3.4/xrvr/workspace for pie\n\niosxr-fwding, V 5.3.4[Default], Cisco Systems, at disk0:iosxr-fwding-5.3.4\n    Built on Tue Oct  4 04:22:33 UTC 2016\n    By iox-lnx-003 in /auto/srcarchive15/production/5.3.4/xrvr/workspace for pie\n\niosxr-routing, V 5.3.4[Default], Cisco Systems, at disk0:iosxr-routing-5.3.4\n    Built on Tue Oct  4 04:22:33 UTC 2016\n    By iox-lnx-003 in /auto/srcarchive15/production/5.3.4/xrvr/workspace for pie\n\niosxr-ce, V 5.3.4[Default], Cisco Systems, at disk0:iosxr-ce-5.3.4\n    Built on Tue Oct  4 04:22:33 UTC 2016\n    By iox-lnx-003 in /auto/srcarchive15/production/5.3.4/xrvr/workspace for pie\n\nxrvr-os-mbi, V 5.3.4[Default], Cisco Systems, at disk0:xrvr-os-mbi-5.3.4\n    Built on Tue Oct  4 04:23:20 UTC 2016\n    By iox-lnx-003 in /auto/srcarchive15/production/5.3.4/xrvr/workspace for pie\n\nxrvr-base, V 5.3.4[Default], Cisco Systems, at disk0:xrvr-base-5.3.4\n    Built on Tue Oct  4 04:22:33 UTC 2016\n    By iox-lnx-003 in /auto/srcarchive15/production/5.3.4/xrvr/workspace for pie\n\nxrvr-fwding, V 5.3.4[Default], Cisco Systems, at disk0:xrvr-fwding-5.3.4\n    Built on Tue Oct  4 04:22:33 UTC 2016\n    By iox-lnx-003 in /auto/srcarchive15/production/5.3.4/xrvr/workspace for pie\n\nxrvr-mgbl-x, V 5.3.4[Default], Cisco Systems, at disk0:xrvr-mgbl-x-5.3.4\n    Built on Tue Oct  4 04:22:39 UTC 2016\n    By iox-lnx-003 in /auto/srcarchive15/production/5.3.4/xrvr/workspace for pie\n\niosxr-mpls, V 5.3.4[Default], Cisco Systems, at disk0:iosxr-mpls-5.3.4\n    Built on Tue Oct  4 04:22:33 UTC 2016\n    By iox-lnx-003 in /auto/srcarchive15/production/5.3.4/xrvr/workspace for pie\n\niosxr-mgbl, V 5.3.4[Default], Cisco Systems, at disk0:iosxr-mgbl-5.3.4\n    Built on Tue Oct  4 04:22:33 UTC 2016\n    By iox-lnx-003 in /auto/srcarchive15/production/5.3.4/xrvr/workspace for pie\n\niosxr-mcast, V 5.3.4[Default], Cisco Systems, at disk0:iosxr-mcast-5.3.4\n    Built on Tue Oct  4 04:22:33 UTC 2016\n    By iox-lnx-003 in /auto/srcarchive15/production/5.3.4/xrvr/workspace for pie\n\nxrvr-mcast-supp, V 5.3.4[Default], Cisco Systems, at disk0:xrvr-mcast-supp-5.3.4\n    Built on Tue Oct  4 04:22:33 UTC 2016\n    By iox-lnx-003 in /auto/srcarchive15/production/5.3.4/xrvr/workspace for pie\n\niosxr-bng, V 5.3.4[Default], Cisco Systems, at disk0:iosxr-bng-5.3.4\n    Built on Tue Oct  4 04:22:31 UTC 2016\n    By iox-lnx-003 in /auto/srcarchive15/production/5.3.4/xrvr/workspace for pie\n\nxrvr-bng-supp, V 5.3.4[Default], Cisco Systems, at disk0:xrvr-bng-supp-5.3.4\n    Built on Tue Oct  4 04:22:31 UTC 2016\n    By iox-lnx-003 in /auto/srcarchive15/production/5.3.4/xrvr/workspace for pie\n\niosxr-security, V 5.3.4[Default], Cisco Systems, at disk0:iosxr-security-5.3.4\n    Built on Tue Oct  4 04:22:24 UTC 2016\n    By iox-lnx-003 in /auto/srcarchive15/production/5.3.4/xrvr/workspace for pie\n\nxrvr-fullk9-x, V 5.3.4[Default], Cisco Systems, at disk0:xrvr-fullk9-x-5.3.4\n    Built on Tue Oct  4 04:23:24 UTC 2016\n    By iox-lnx-003 in /auto/srcarchive15/production/5.3.4/xrvr/workspace for pie",
+
+    "terminal length 0": "OK",
+    "terminal width 0": "OK",
+
+    "configure": {
+    	"name": "configure",
+    	"newprompt": "RP/0/0/CPU0:XR5(config)#"
+    },
+
+    "root": {
+        "name": "root",
+        "newprompt": "RP/0/0/CPU0:XR5(config)#"
+    },
+
+    "commit": {
+        "name": "commit",
+        "newprompt": "RP/0/0/CPU0:XR5(config)#"
+    },
+
+    "end": {
+    	"name": "end",
+    	"newprompt": "RP/0/0/CPU0:XR5#"
+    },
+
+	"exit": ""
+
+}
