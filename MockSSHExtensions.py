@@ -44,7 +44,8 @@ class ShowCommand(MockSSH.SSHCommand):
                     self.writeln(self.data[k])
                     break
         else:
-            self.writeln("% Invalid input")
+            # Try to get arg from data if cannot return '% Invalid input'
+            self.writeln(self.data.get(" ".join(self.args), "% Invalid input"))
 
         self.exit()
 
