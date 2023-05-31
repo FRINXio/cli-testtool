@@ -25,6 +25,7 @@ class ShowCommand(MockSSH.SSHCommand):
         self.data = data
         self.cmd_delay = cmd_delay
         self.required_arguments = [name] + list(args)
+        print("DEBUG ShowCommand __init__ %s " % (self.required_arguments))
         self.protocol = None  # set in __call__
 
     def __call__(self, protocol, *args):
@@ -37,7 +38,10 @@ class ShowCommand(MockSSH.SSHCommand):
 
     def start(self):
         reqArgsEscaped = map(lambda x: x.replace('"', ''), self.required_arguments[1:])
+        print("DEBUG ShowCommand start reqArgsEscaped %s " % (reqArgsEscaped))
         noArgs = (len(self.args[1:]) == 0) and (len(reqArgsEscaped) == 0)
+        print("DEBUG ShowCommand start noArgs %s " % (noArgs))
+        print("DEBUG ShowCommand start %s " % (self.data))
         if (noArgs or " ".join(self.args[1:]) in set(reqArgsEscaped)):
             for k in self.data.keys():
                 if (k == " ".join(self.args) or k.replace('"', '') == " ".join(self.args)):
@@ -48,6 +52,56 @@ class ShowCommand(MockSSH.SSHCommand):
             self.writeln(self.data.get(" ".join(self.args), "% Invalid input"))
 
         self.exit()
+
+class NormalCommand(MockSSH.SSHCommand):
+
+    def __init__(self, name, value, cmd_delay):
+        self.name = name
+        self.value = value
+        self.cmd_delay = cmd_delay
+        self.protocol = None  # set in __call__
+
+    def __call__(self, protocol, *args):
+        if self.cmd_delay is not 0:
+            print "Sleeping for %f seconds" % (self.cmd_delay / 1000.0)
+            time.sleep(self.cmd_delay / 1000.0)
+
+        print("DEBUG NormalCommand __call__ %s %s" % (self.name, self.value))
+        MockSSH.SSHCommand.__init__(self, protocol, self.name, *args)
+        return self
+
+    def start(self):
+        self.writeln(self.value)
+        self.exit()
+
+class CommandChangingCommand(MockSSH.SSHCommand):
+
+    def __init__(self, name, value, cmd_delay):
+        self.name = name
+        self.value = value
+        self.cmd_delay = cmd_delay
+        self.protocol = None  # set in __call__
+        print("DEBUG CommandChangingCommand __init__ %s" % (self.name))
+
+    def __call__(self, protocol, *args):
+        if self.cmd_delay is not 0:
+            print "Sleeping for %f seconds" % (self.cmd_delay / 1000.0)
+            time.sleep(self.cmd_delay / 1000.0)
+
+        print("DEBUG CommandChangingCommand __call__ %s %s" % (self.name, self.value))
+        MockSSH.SSHCommand.__init__(self, protocol, self.name, *args)
+        return self
+
+    def start(self):
+        all_members = self.__dict__.keys()
+        print("DEBUG CommandChangingCommand before %s" % (all_members))
+        self.writeln(self.value["actual"])
+        temp = self
+        self.value["actual"], self.value["new"] = self.value["new"], self.value["actual"]
+        all_members = self.__dict__.keys()
+        print("DEBUG CommandChangingCommand after %s" % (all_members))
+        self.exit()
+
 
 class PromptChangingCommand(MockSSH.SSHCommand):
 
