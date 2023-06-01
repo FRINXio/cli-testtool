@@ -53,27 +53,6 @@ class ShowCommand(MockSSH.SSHCommand):
 
         self.exit()
 
-class NormalCommand(MockSSH.SSHCommand):
-
-    def __init__(self, name, value, cmd_delay):
-        self.name = name
-        self.value = value
-        self.cmd_delay = cmd_delay
-        self.protocol = None  # set in __call__
-
-    def __call__(self, protocol, *args):
-        if self.cmd_delay is not 0:
-            print "Sleeping for %f seconds" % (self.cmd_delay / 1000.0)
-            time.sleep(self.cmd_delay / 1000.0)
-
-        print("DEBUG NormalCommand __call__ %s %s" % (self.name, self.value))
-        MockSSH.SSHCommand.__init__(self, protocol, self.name, *args)
-        return self
-
-    def start(self):
-        self.writeln(self.value)
-        self.exit()
-
 class CommandChangingCommand(MockSSH.SSHCommand):
 
     def __init__(self, name, value, cmd_delay):

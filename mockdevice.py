@@ -121,7 +121,7 @@ def spawn_server(port_low, port_high, interface, protocol_type, data):
                 local_commands.append(command)
 
             for cmd in show_commands:
-                command = getNormalCommand(cmd, show_commands[cmd], cmd_delay)
+                command = getShowCommand(cmd, show_commands[cmd], cmd_delay)
                 local_commands.append(command)
 
             for cmd in prompt_change_commands:
@@ -176,13 +176,12 @@ def parse_commands(data):
                 prompt_change_commands[cmd] = data[cmd]
                 print ("Adding prompt changing command: %s" % cmd)
         else:
-            show_commands[cmd] = data[cmd]
-            # cmd_split = cmd.split(" ", 1)
-            # if (len(cmd_split) == 1):
-            #     show_commands[cmd_split[0]]
-            # else:
-            #     show_commands[cmd_split[0]].append(cmd_split[1])
-            # print("Adding show command: %s, with arguments: %s" % (cmd, show_commands[cmd]))
+            cmd_split = cmd.split(" ", 1)
+            if (len(cmd_split) == 1):
+                show_commands[cmd_split[0]]
+            else:
+                show_commands[cmd_split[0]].append(cmd_split[1])
+            print("Adding show command: %s, with arguments: %s" % (cmd, show_commands[cmd]))
 
     return (show_commands, prompt_change_commands, command_change_commands, usr, passwd, cmd_delay, default_prompt)
 
@@ -198,8 +197,6 @@ def getPasswordPromptCommand(cmd, values, cmd_delay):
 def getPromptChangingCommand(cmd, values, cmd_delay):
     return MockSSHExtensions.PromptChangingCommand(cmd, values["newprompt"], cmd_delay)
 
-def getNormalCommand(cmd, value, cmd_delay):
-    return MockSSHExtensions.NormalCommand(cmd, value, cmd_delay)
 
 def getShowCommand(cmd, data, arguments, cmd_delay):
     return MockSSHExtensions.ShowCommand(cmd, data, cmd_delay, *arguments)
