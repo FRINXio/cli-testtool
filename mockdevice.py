@@ -121,7 +121,7 @@ def spawn_server(port_low, port_high, interface, protocol_type, data):
                 local_commands.append(command)
 
             for cmd in show_commands:
-                command = getShowCommand(cmd, show_commands[cmd], cmd_delay)
+                command = getShowCommand(cmd, data, show_commands[cmd], cmd_delay)
                 local_commands.append(command)
 
             for cmd in prompt_change_commands:
@@ -155,7 +155,7 @@ def spawn_server(port_low, port_high, interface, protocol_type, data):
 
 
 def parse_commands(data):
-    show_commands = {} # defaultdict(list)
+    show_commands = defaultdict(list)
     prompt_change_commands = {}
     command_change_commands = {}
 
