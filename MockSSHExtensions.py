@@ -38,15 +38,16 @@ class ShowCommand(MockSSH.SSHCommand):
 
     def start(self):
         reqArgsEscaped = map(lambda x: x.replace('"', ''), self.required_arguments[1:])
-        print("DEBUG ShowCommand start reqArgsEscaped %s " % (reqArgsEscaped))
         noArgs = (len(self.args[1:]) == 0) and (len(reqArgsEscaped) == 0)
-        print("DEBUG ShowCommand start noArgs %s " % (noArgs))
-        print("DEBUG ShowCommand start %s " % (self.data))
         if (noArgs or " ".join(self.args[1:]) in set(reqArgsEscaped)):
             for k in self.data.keys():
                 if (k == " ".join(self.args) or k.replace('"', '') == " ".join(self.args)):
                     self.writeln(self.data[k])
                     break
+        elif isChangingCommand(self):
+            command = " ".join(self.args[:])
+            self.writeln(self.data[command]["actual"])
+            self.data[command]["actual"], self.data[command)]["new"] = self.data[command]["new"], self.data[command)]["actual"]        
         else:
             # Try to get arg from data if cannot return '% Invalid input'
             self.writeln(self.data.get(" ".join(self.args), "% Invalid input"))
@@ -144,6 +145,10 @@ class SimplePromptingCommand(MockSSH.SSHCommand):
         self.protocol.password_input = False
         self.exit()
 
+
+def isChangingCommand(object) :
+    command = " ".join(object.args[:])
+    return (command in set(object.data.keys())) and (object.data[command]["change_commands"] == True)
 
 def getTelnetFactory(commands, prompt, **users):
     if not users:
