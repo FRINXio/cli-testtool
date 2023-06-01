@@ -111,7 +111,6 @@ def spawn_server(port_low, port_high, interface, protocol_type, data):
         try:
             print("Spawning")
             show_commands, prompt_change_commands, command_change_commands, usr, passwd, cmd_delay, default_prompt = parse_commands(data)
-            print("Spawning %s" % show_commands)
             users = {usr: passwd}
 
             local_commands = []
@@ -131,14 +130,6 @@ def spawn_server(port_low, port_high, interface, protocol_type, data):
                     command = getPromptChangingCommand(cmd, prompt_change_commands[cmd], cmd_delay)
                 local_commands.append(command)
 
-
-            print("DEBUG SIMON: spawn_server %s" % local_commands)
-            for cmd in local_commands:
-                print("DEBUG SIMON: cmd %s" % cmd.name)
-                if cmd.name == "show":
-                    # local_commands.remove(cmd)
-                    print("tu je betar")
-            print("DEBUG SIMON: spawn_server %s" % local_commands)
             factory = None
             if (protocol_type == "ssh"):
                 factory = MockSSH.getSSHFactory(local_commands, default_prompt, ".", **users)
@@ -168,7 +159,6 @@ def parse_commands(data):
     print("Using username: %s and password: %s" % (usr, passwd))
 
     for cmd in data:
-        print("parse_commands cmd: %s" % (cmd))
         if isinstance(data[cmd], dict):
             if "change_commands" in data[cmd]:
                 command_change_commands[cmd] = data[cmd]
