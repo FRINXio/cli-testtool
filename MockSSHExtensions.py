@@ -43,10 +43,35 @@ class ShowCommand(MockSSH.SSHCommand):
                 if (k == " ".join(self.args) or k.replace('"', '') == " ".join(self.args)):
                     self.writeln(self.data[k])
                     break
+        elif isChangingCommand(self):
+            command = " ".join(self.args[:])
+            self.writeln(self.data[command]["actual"])
+            self.data[command]["actual"], self.data[command)]["new"] = self.data[command]["new"], self.data[command)]["actual"]        
         else:
             # Try to get arg from data if cannot return '% Invalid input'
             self.writeln(self.data.get(" ".join(self.args), "% Invalid input"))
 
+        self.exit()
+
+class CommandChangingCommand(MockSSH.SSHCommand):
+
+    def __init__(self, name, value, cmd_delay):
+        self.name = name
+        self.value = value
+        self.cmd_delay = cmd_delay
+        self.protocol = None  # set in __call__
+
+    def __call__(self, protocol, *args):
+        if self.cmd_delay is not 0:
+            print "Sleeping for %f seconds" % (self.cmd_delay / 1000.0)
+            time.sleep(self.cmd_delay / 1000.0)
+
+        MockSSH.SSHCommand.__init__(self, protocol, self.name, *args)
+        return self
+
+    def start(self):
+        self.writeln(self.value["actual"])
+        self.value["actual"], self.value["new"] = self.value["new"], self.value["actual"]
         self.exit()
 
 class PromptChangingCommand(MockSSH.SSHCommand):
@@ -111,6 +136,10 @@ class SimplePromptingCommand(MockSSH.SSHCommand):
         self.protocol.password_input = False
         self.exit()
 
+
+def isChangingCommand(object) :
+    command = " ".join(object.args[:])
+    return (command in set(object.data.keys())) and (object.data[command]["change_commands"] == True)
 
 def getTelnetFactory(commands, prompt, **users):
     if not users:

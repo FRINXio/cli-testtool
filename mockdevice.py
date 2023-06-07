@@ -110,11 +110,14 @@ def spawn_server(port_low, port_high, interface, protocol_type, data):
     for i in range(port_low, port_high + 1):
         try:
             print("Spawning")
-            show_commands, prompt_change_commands, usr, passwd, cmd_delay, default_prompt = parse_commands(data)
-
+            show_commands, prompt_change_commands, command_change_commands, usr, passwd, cmd_delay, default_prompt = parse_commands(data)
             users = {usr: passwd}
 
             local_commands = []
+
+            for cmd in command_change_commands:
+                command = getCommandChangingCommand(cmd, command_change_commands[cmd], cmd_delay)
+                local_commands.append(command)
 
             for cmd in show_commands:
                 command = getShowCommand(cmd, data, show_commands[cmd], cmd_delay)
@@ -145,6 +148,7 @@ def spawn_server(port_low, port_high, interface, protocol_type, data):
 def parse_commands(data):
     show_commands = defaultdict(list)
     prompt_change_commands = {}
+    command_change_commands = {}
 
     default_prompt = data["setting_default_prompt"]
     cmd_delay = data["setting_cmd_delay"]
@@ -156,17 +160,24 @@ def parse_commands(data):
 
     for cmd in data:
         if isinstance(data[cmd], dict):
-            prompt_change_commands[cmd] = data[cmd]
-            # print "Adding prompt changing command: %s" % cmd
+            if "change_commands" in data[cmd]:
+                command_change_commands[cmd] = data[cmd]
+            else:
+                prompt_change_commands[cmd] = data[cmd]
+                print ("Adding prompt changing command: %s" % cmd)
         else:
             cmd_split = cmd.split(" ", 1)
             if (len(cmd_split) == 1):
                 show_commands[cmd_split[0]]
             else:
                 show_commands[cmd_split[0]].append(cmd_split[1])
-            # print("Adding show command: %s, with arguments: %s" % (cmd, show_commands[cmd]))
+            print("Adding show command: %s, with arguments: %s" % (cmd, show_commands[cmd]))
 
-    return (show_commands, prompt_change_commands, usr, passwd, cmd_delay, default_prompt)
+    return (show_commands, prompt_change_commands, command_change_commands, usr, passwd, cmd_delay, default_prompt)
+
+
+def getCommandChangingCommand(cmd, value, cmd_delay):
+    return MockSSHExtensions.CommandChangingCommand(cmd, value, cmd_delay)
 
 
 def getPasswordPromptCommand(cmd, values, cmd_delay):
