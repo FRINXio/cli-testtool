@@ -46,7 +46,7 @@ class ShowCommand(MockSSH.SSHCommand):
         elif isChangingCommand(self):
             command = " ".join(self.args[:])
             self.writeln(self.data[command]["actual"])
-            self.data[command]["actual"], self.data[command)]["new"] = self.data[command]["new"], self.data[command)]["actual"]        
+            self.data[command]["actual"], self.data[command]["new"] = self.data[command]["new"], self.data[command]["actual"]
         else:
             # Try to get arg from data if cannot return '% Invalid input'
             self.writeln(self.data.get(" ".join(self.args), "% Invalid input"))
